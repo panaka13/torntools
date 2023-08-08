@@ -14,12 +14,9 @@ export function ViewBookieResult() {
     event.preventDefault();
     let userid = Number(event.target.user.value);
     let api = event.target.api.value;
-    console.log(event.target.from.value);
     let from = new Date(event.target.from.value);
-    console.log(event.target.to.value);
     let to = new Date(event.target.to.value);
     const [error, bookieResults] = await getBookieResults(api, userid, from, to);
-    console.log(bookieResults.length);
     setBookieResults(bookieResults);
   }
 
@@ -60,6 +57,7 @@ export function ViewBookieResult() {
             <th>Date</th>
             <th>Game</th>
             <th>Description</th>
+            <th>Type</th>
             <th>TBT</th>
             <th>Base</th>
             <th>Rate</th>
@@ -70,9 +68,10 @@ export function ViewBookieResult() {
           {bookieResultState.map((bookieResult: BookieResult, index: number) => (
             <tr>
               <td>{bookieResult.toTornTime()}</td>
-              <td>game</td>
-              <td>description</td>
-              <td>tbt</td>
+              <td></td>
+              <td>{bookieResult.getDescription()}</td>
+              <td>{bookieResult.getTypeStr()}</td>
+              <td></td>
               <td>{bookieResult.bet}</td>
               <td>{bookieResult.odds}</td>
               <td>{bookieResult.getStatusStr()}</td>

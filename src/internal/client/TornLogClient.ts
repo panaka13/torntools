@@ -1,8 +1,6 @@
 import { buildUrl } from "build-url-ts";
-import { Console } from "console";
 
 export async function queryTorn(url: string) {
-  console.log(url);
   const response = await fetch(url, {
     method: "GET",
     headers: {
@@ -29,8 +27,6 @@ export async function GetLogInfo(
   to: number,
   log_types: Array<number>
 ) {
-  console.log(from);
-  console.log(to);
   const url = buildUrl("https://api.torn.com/", {
     path: "user/" + user,
     queryParams: {
@@ -47,4 +43,22 @@ export async function GetLogInfo(
     return [error, json];
   }
   return [null, json.log];
+}
+
+export async function getEventInfo(api: string, user: number, from: number, to: number) {
+  const url = buildUrl("https://api.torn.com/", {
+    path: "user/" + user,
+    queryParams: {
+      selections: "events",
+      key: api,
+      from: from,
+      to: to,
+      comment: "panaka_13",
+    },
+  });
+  const [error, json] = await queryTorn(url);
+  if (error !== null) {
+    return [error, json];
+  }
+  return [null, json.events];
 }

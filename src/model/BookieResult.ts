@@ -9,6 +9,92 @@ export enum BookieStatus {
   Refund = 3,
 }
 
+export enum BookieType {
+  UNKNOWN = 0,
+  TWO_WAY_FULL = 1,
+  THREE_WAY_ORDINARY = 2,
+  ASIAN_HANDICAP = 3,
+  OVER_UNDER = 4,
+  BTTS = 5,
+}
+
+// You won $2,600,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a
+// href = http://www.torn.com/\"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983\">
+// Viking v Bodoe/Glimt</a>"
+
+// "You lost your $500,000 Draw (3-Way Ordinary time) bet on <a
+// href = http://www.torn.com/\"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4123800\">
+// Bahia v America MG</a>"
+
+// "Your $2,000,000 Geelong Cats (2-Way Full event) bet on <a
+// href="page.php?sid=bookie#/your-bets/4078025" i-data="i_507_23307_165_14">Sydney Swans v Geelong Cats</a> was refunded"
+
+function regexExtract(input: string, pattern: string) {
+  let regex = new RegExp(pattern);
+  let matches = regex.exec(input);
+  if (matches === null) {
+    return null;
+  }
+  return matches[0];
+}
+
+function parseEvent(event: string) {
+  if (!(event.includes("bookie") && event.includes("your-bets"))) {
+    return null;
+  }
+  let extract;
+  if ((extract = regexExtract(event, "your-bets/\\d+")) !== null) {
+    var selection = parseInt(extract.substring(10, extract.length));
+  } else {
+    return null;
+  }
+  if ((extract = regexExtract(event, "[yY]our \\$\\S+")) !== null) {
+    var bet = parseInt(extract.substring(6, extract.length).replaceAll(",", "")) / MILLION;
+  } else {
+    return null;
+  }
+  if ((extract = regexExtract(event, ">.*</a>")) !== null) {
+    var description = extract.substring(1, extract.length - 4);
+  } else {
+    return null;
+  }
+  if (event.includes("won")) {
+    var status = BookieStatus.Win;
+  } else if (event.includes("lost")) {
+    var status = BookieStatus.Lose;
+  } else if (event.includes("refunded")) {
+    var status = BookieStatus.Refund;
+  } else {
+    return null;
+  }
+  if ((extract = regexExtract(event, "(.*) bet")) !== null) {
+    var bookieType: BookieType;
+    if (extract.includes("3-Way Ordinary time")) {
+      bookieType = BookieType.THREE_WAY_ORDINARY;
+    } else if (extract.includes("2-Way Full event")) {
+      bookieType = BookieType.TWO_WAY_FULL;
+    } else if (extract.includes("Asian Handicap")) {
+      bookieType = BookieType.ASIAN_HANDICAP;
+    } else if (extract.includes("Over/Under")) {
+      bookieType = BookieType.OVER_UNDER;
+    } else if (extract.includes("Both Teams to Score")) {
+      bookieType = BookieType.BTTS;
+    } else {
+      bookieType = BookieType.UNKNOWN;
+    }
+  } else {
+    return null;
+  }
+  let result: [number, number, string, BookieType, BookieStatus] = [
+    selection,
+    bet,
+    description,
+    bookieType,
+    status,
+  ];
+  return result;
+}
+
 export class BookieResult {
   id: string;
   timestamp: number;
@@ -17,6 +103,8 @@ export class BookieResult {
   bet: number;
   odds: number;
   deduction: number;
+  description: string;
+  type: BookieType;
 
   constructor(
     id: string,
@@ -34,6 +122,8 @@ export class BookieResult {
     this.bet = bet / MILLION;
     this.odds = odds;
     this.deduction = deduction;
+    this.description = "";
+    this.type = BookieType.UNKNOWN;
   }
 
   getResultValue() {
@@ -61,6 +151,32 @@ export class BookieResult {
   getStatusStr() {
     return BookieStatus[this.status];
   }
+
+  getTypeStr() {
+    return BookieType[this.type];
+  }
+
+  getDescription() {
+    if (this.description) {
+      return this.description;
+    } else {
+      return "https://www.torn.com/page.php?sid=bookie#/your-bets/" + this.selection.toString();
+    }
+  }
+
+  tryAddDetailFromEvent(event: string) {
+    let parseResult = parseEvent(event);
+    if (parseResult === null) {
+      return false;
+    }
+    let [selection, bet, description, bookieType, status] = parseResult;
+    if (this.selection != selection || this.bet != bet || this.status != status) {
+      return false;
+    }
+    this.description = description;
+    this.type = bookieType;
+    return true;
+  }
 }
 
 function isValidBookieResult(json: any) {
@@ -80,7 +196,6 @@ function isValidBookieResult(json: any) {
   if (data.selection.length < 1) {
     return false;
   }
-  console.log("pass");
   return true;
 }
 
