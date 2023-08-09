@@ -67,6 +67,12 @@ function parseEvent(event: string) {
   } else {
     return null;
   }
+  var won: number = 0;
+  if (status == BookieStatus.Win) {
+    if ((extract = regexExtract(event, "won \\$\\S+")) !== null) {
+      won = parseInt(extract.substring(5, extract.length).replaceAll(",", "")) / MILLION;
+    }
+  }
   if ((extract = regexExtract(event, "(.*) bet")) !== null) {
     var bookieType: BookieType;
     if (extract.includes("3-Way Ordinary time")) {
@@ -85,9 +91,10 @@ function parseEvent(event: string) {
   } else {
     return null;
   }
-  let result: [number, number, string, BookieType, BookieStatus] = [
+  let result: [number, number, number, string, BookieType, BookieStatus] = [
     selection,
     bet,
+    won,
     description,
     bookieType,
     status,
@@ -169,8 +176,11 @@ export class BookieResult {
     if (parseResult === null) {
       return false;
     }
-    let [selection, bet, description, bookieType, status] = parseResult;
+    let [selection, bet, won, description, bookieType, status] = parseResult;
     if (this.selection != selection || this.bet != bet || this.status != status) {
+      return false;
+    }
+    if (this.status === BookieStatus.Win && this.getResultValue() != won) {
       return false;
     }
     if (this.description && this.type !== BookieType.UNKNOWN) {
