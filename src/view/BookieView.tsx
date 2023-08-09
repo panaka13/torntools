@@ -26,25 +26,20 @@ export function ViewBookieResult() {
         <Form onSubmit={handleUpdate}>
           <Form.Group controlId="BookieUser">
             <Form.Label>User</Form.Label>
-            <Form.Control name="user" type="number" placeholder="userid" defaultValue={2887531} />
+            <Form.Control name="user" type="number" placeholder="userid" />
           </Form.Group>
           <Form.Group controlId="BookieAPIKey">
             <Form.Label>API-key</Form.Label>
-            <Form.Control
-              name="api"
-              type="text"
-              placeholder="API-key"
-              defaultValue={"15xAq7Fl8GBKD3EB"}
-            />
+            <Form.Control name="api" type="text" placeholder="API-key" />
             <Form.Text className="text-muted">Your limited API key</Form.Text>
           </Form.Group>
           <Form.Group controlId="BookieFrom">
             <Form.Label>From</Form.Label>
-            <Form.Control name="from" type="date" defaultValue={1691280000000} />
+            <Form.Control name="from" type="date" />
           </Form.Group>
           <Form.Group controlId="BookieTo">
             <Form.Label>To</Form.Label>
-            <Form.Control name="to" type="date" defaultValue={1691280000000} />
+            <Form.Control name="to" type="date" />
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit
