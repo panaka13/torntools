@@ -1,6 +1,6 @@
 import { stat } from "fs";
 import { MILLION, MS_IN_HOUR } from "../internal/common/Consts";
-import { dateToString } from "../internal/common/Utility";
+import { dateToString, approximatelyEquals } from "../internal/common/Utility";
 
 export enum BookieStatus {
   None = 0,
@@ -180,7 +180,7 @@ export class BookieResult {
     if (this.selection != selection || this.bet != bet || this.status != status) {
       return false;
     }
-    if (this.status === BookieStatus.Win && this.getResultValue() != won) {
+    if (this.status === BookieStatus.Win && !approximatelyEquals(this.getResultValue(), won)) {
       return false;
     }
     if (this.description && this.type !== BookieType.UNKNOWN) {
