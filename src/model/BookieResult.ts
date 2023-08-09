@@ -128,6 +128,7 @@ export class BookieResult {
     this.selection = selection;
     this.bet = bet / MILLION;
     this.odds = odds;
+    console.log(typeof this.odds);
     this.deduction = deduction;
     this.description = "";
     this.type = BookieType.UNKNOWN;
@@ -232,7 +233,7 @@ export function createBookieResult(id: string, json: any) {
   let status = getBookieStatus(json);
   let timestamp = json.timestamp * 1000;
   let selection = Number(json.data.selection[0]);
-  let odds = json.data.odds;
+  let odds = parseInt(json.data.odds);
   let bet = json.data.bet;
 
   return new BookieResult(id, timestamp, status, selection, bet, odds, 0);

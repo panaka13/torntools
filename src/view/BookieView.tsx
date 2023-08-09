@@ -56,7 +56,9 @@ export function ViewBookieResult() {
             <th>TBT</th>
             <th>Base</th>
             <th>Rate</th>
-            <th>Win</th>
+            <th>Win/Lose</th>
+            <th>Net</th>
+            <th>Balance</th>
           </tr>
         </thead>
         <tbody>
@@ -67,9 +69,11 @@ export function ViewBookieResult() {
               <td>{bookieResult.getDescription()}</td>
               <td>{bookieResult.getTypeStr()}</td>
               <td></td>
-              <td>{bookieResult.bet}</td>
-              <td>{bookieResult.odds}</td>
+              <td>{bookieResult.bet.toFixed(2)}</td>
+              <td>{bookieResult.odds.toFixed(2)}</td>
               <td>{bookieResult.getStatusStr()}</td>
+              <td>{bookieResult.getResultValue().toFixed(4)}</td>
+              <td>{bookieResult.getWinningValue().toFixed(4)}</td>
             </tr>
           ))}
         </tbody>
