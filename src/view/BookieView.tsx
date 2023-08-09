@@ -17,6 +17,9 @@ export function ViewBookieResult() {
     let from = new Date(event.target.from.value);
     let to = new Date(event.target.to.value);
     const [error, bookieResults] = await getBookieResults(api, userid, from, to);
+    if (error) {
+      return;
+    }
     setBookieResults(bookieResults);
   }
 
