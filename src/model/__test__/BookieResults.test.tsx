@@ -1,4 +1,5 @@
-import { BookieResult, BookieStatus, BookieType } from "../BookieResult";
+import exp from "constants";
+import { BookieResult, BookieStatus, BookieType, createBookieResult } from "../BookieResult";
 
 // You won $2,600,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a
 // href = http://www.torn.com/\"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983\">
@@ -158,5 +159,54 @@ href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid
 Viking v Bodoe/Glimt</a>';
 
     expect(winBet.tryAddDetailFromEvent(winDetail)).toBeFalsy();
+  });
+});
+
+describe("test createBookieResult", () => {
+  test("test lose result", () => {
+    let json = JSON.parse(
+      '{\
+      "log":8461,\
+      "title":"Bookie lose (new)",\
+      "timestamp":1691593209,\
+      "category":"Casino",\
+      "data":{"selection":["4111322",867999794,7284579127],"odds":"3.42","bet":500000},\
+      "params":{"italic":1,"color":"red"}\
+    }'
+    );
+    let bookieResult = createBookieResult("test_id", json);
+    expect(bookieResult).toBeTruthy();
+    if (bookieResult !== null) {
+      expect(bookieResult.bet).toBe(0.5);
+      expect(bookieResult.selection).toBe(4111322);
+      expect(bookieResult.status).toBe(BookieStatus.Lose);
+      expect(bookieResult.odds).toBe(3.42);
+      expect(bookieResult.timestamp).toBe(1691593209000);
+      expect(bookieResult.deduction).toBe(0);
+    }
+  });
+
+  test("test win result", () => {
+    let json = JSON.parse(
+      '{\
+        "log":8462,\
+        "title":"Bookie win (new)",\
+        "timestamp":1691588949,\
+        "category":"Casino",\
+        "data":{"selection":["4153870",867359500,7281040187],\
+        "odds":"3.50","bet":500000,"winnings":1750000,"deduction":""},\
+        "params":{"italic":1,"color":"green"}\
+      }'
+    );
+    let bookieResult = createBookieResult("test_id", json);
+    expect(bookieResult).toBeTruthy();
+    if (bookieResult !== null) {
+      expect(bookieResult.bet).toBe(0.5);
+      expect(bookieResult.selection).toBe(4153870);
+      expect(bookieResult.status).toBe(BookieStatus.Win);
+      expect(bookieResult.odds).toBe(3.5);
+      expect(bookieResult.timestamp).toBe(1691588949000);
+      expect(bookieResult.deduction).toBe(0);
+    }
   });
 });
