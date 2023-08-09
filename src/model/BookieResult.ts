@@ -173,6 +173,9 @@ export class BookieResult {
     if (this.selection != selection || this.bet != bet || this.status != status) {
       return false;
     }
+    if (this.description && this.type !== BookieType.UNKNOWN) {
+      return false;
+    }
     this.description = description;
     this.type = bookieType;
     return true;

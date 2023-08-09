@@ -140,4 +140,14 @@ Viking v Bodoe/Glimt</a>';
     expect(winBet.description).toBe("");
     expect(winBet.type).toBe(BookieType.UNKNOWN);
   });
+
+  test("test addDetailFromEvent twice does not have effect", () => {
+    let winDetail =
+      'You won $2,600,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a\
+href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983">\
+Viking v Bodoe/Glimt</a>';
+
+    winBet.tryAddDetailFromEvent(winDetail);
+    expect(winBet.tryAddDetailFromEvent(winDetail)).toBeFalsy();
+  });
 });
