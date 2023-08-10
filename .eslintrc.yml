@@ -13,9 +13,12 @@ parserOptions:
 
 plugins:
   - react
+ignorePatterns:
+  - src/reportWebVitals.ts
+  - src/react-app-env.d.ts
+  - setupTests.ts
 rules: 
   semi: [2, "always"]
   "@typescript-eslint/semi": [0]
   "@typescript-eslint/explicit-function-return-type": "off"
   "@typescript-eslint/space-before-function-paren": "off"
-
