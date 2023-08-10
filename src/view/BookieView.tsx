@@ -3,21 +3,19 @@ import { getBookieResults } from "../controller/BookieController";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import { BookieResult } from "../model/BookieResult";
+import { type BookieResult } from "../model/BookieResult";
 
 export function ViewBookieResult() {
-  const [error, setError] = React.useState<string>("");
-  const [text, setText] = React.useState<string>("hello world");
   const [bookieResultState, setBookieResults] = React.useState(Array<BookieResult>());
 
   async function handleUpdate(event: any) {
     event.preventDefault();
-    let userid = Number(event.target.user.value);
-    let api = event.target.api.value;
-    let from = new Date(event.target.from.value);
-    let to = new Date(event.target.to.value);
+    const userid = Number(event.target.user.value);
+    const api = event.target.api.value;
+    const from = new Date(event.target.from.value);
+    const to = new Date(event.target.to.value);
     const [error, bookieResults] = await getBookieResults(api, userid, from, to);
-    if (error) {
+    if (error != null) {
       return;
     }
     setBookieResults(bookieResults);
@@ -66,7 +64,7 @@ export function ViewBookieResult() {
         </thead>
         <tbody>
           {bookieResultState.map((bookieResult: BookieResult, index: number) => (
-            <tr>
+            <tr key={bookieResult.id}>
               <td>{bookieResult.toTornTime()}</td>
               <td></td>
               <td>{bookieResult.getDescription()}</td>

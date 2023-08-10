@@ -1,4 +1,3 @@
-import { stat } from "fs";
 import { MILLION, MS_IN_HOUR } from "../internal/common/Consts";
 import { dateToString, approximatelyEquals } from "../internal/common/Utility";
 
@@ -30,8 +29,8 @@ export enum BookieType {
 // href="page.php?sid=bookie#/your-bets/4078025" i-data="i_507_23307_165_14">Sydney Swans v Geelong Cats</a> was refunded"
 
 function regexExtract(input: string, pattern: string) {
-  let regex = new RegExp(pattern);
-  let matches = regex.exec(input);
+  const regex = new RegExp(pattern);
+  const matches = regex.exec(input);
   if (matches === null) {
     return null;
   }
@@ -43,38 +42,42 @@ function parseEvent(event: string) {
     return null;
   }
   let extract;
+  let selection = null;
   if ((extract = regexExtract(event, "your-bets/\\d+")) !== null) {
-    var selection = parseInt(extract.substring(10, extract.length));
+    selection = parseInt(extract.substring(10, extract.length));
   } else {
     return null;
   }
+  let bet = null;
   if ((extract = regexExtract(event, "[yY]our \\$\\S+")) !== null) {
-    var bet = parseInt(extract.substring(6, extract.length).replaceAll(",", "")) / MILLION;
+    bet = parseInt(extract.substring(6, extract.length).replaceAll(",", "")) / MILLION;
   } else {
     return null;
   }
+  let description = null;
   if ((extract = regexExtract(event, ">.*</a>")) !== null) {
-    var description = extract.substring(1, extract.length - 4);
+    description = extract.substring(1, extract.length - 4);
   } else {
     return null;
   }
+  let status = BookieStatus.None;
   if (event.includes("won")) {
-    var status = BookieStatus.Win;
+    status = BookieStatus.Win;
   } else if (event.includes("lost")) {
-    var status = BookieStatus.Lose;
+    status = BookieStatus.Lose;
   } else if (event.includes("refunded")) {
-    var status = BookieStatus.Refund;
+    status = BookieStatus.Refund;
   } else {
     return null;
   }
-  var won: number = 0;
-  if (status == BookieStatus.Win) {
+  let won: number = 0;
+  if (status === BookieStatus.Win) {
     if ((extract = regexExtract(event, "won \\$\\S+")) !== null) {
       won = parseInt(extract.substring(5, extract.length).replaceAll(",", "")) / MILLION;
     }
   }
+  let bookieType: BookieType = BookieType.UNKNOWN;
   if ((extract = regexExtract(event, "(.*) bet")) !== null) {
-    var bookieType: BookieType;
     if (extract.includes("3-Way Ordinary time")) {
       bookieType = BookieType.THREE_WAY_ORDINARY;
     } else if (extract.includes("2-Way Full event")) {
@@ -91,13 +94,13 @@ function parseEvent(event: string) {
   } else {
     return null;
   }
-  let result: [number, number, number, string, BookieType, BookieStatus] = [
+  const result: [number, number, number, string, BookieType, BookieStatus] = [
     selection,
     bet,
     won,
     description,
     bookieType,
-    status,
+    status
   ];
   return result;
 }
@@ -151,7 +154,7 @@ export class BookieResult {
   }
 
   toTornTime() {
-    let tornDate = new Date(this.timestamp + MS_IN_HOUR);
+    const tornDate = new Date(this.timestamp + MS_IN_HOUR);
     return dateToString(tornDate);
   }
 
@@ -164,7 +167,7 @@ export class BookieResult {
   }
 
   getDescription() {
-    if (this.description) {
+    if (this.description != null && this.description !== "") {
       return this.description;
     } else {
       return "https://www.torn.com/page.php?sid=bookie#/your-bets/" + this.selection.toString();
@@ -172,18 +175,18 @@ export class BookieResult {
   }
 
   tryAddDetailFromEvent(event: string) {
-    let parseResult = parseEvent(event);
+    const parseResult = parseEvent(event);
     if (parseResult === null) {
       return false;
     }
-    let [selection, bet, won, description, bookieType, status] = parseResult;
-    if (this.selection != selection || this.bet != bet || this.status != status) {
+    const [selection, bet, won, description, bookieType, status] = parseResult;
+    if (this.selection !== selection || this.bet !== bet || this.status !== status) {
       return false;
     }
     if (this.status === BookieStatus.Win && !approximatelyEquals(this.getResultValue(), won)) {
       return false;
     }
-    if (this.description && this.type !== BookieType.UNKNOWN) {
+    if (this.description != null && this.description !== "" && this.type !== BookieType.UNKNOWN) {
       return false;
     }
     this.description = description;
@@ -193,17 +196,17 @@ export class BookieResult {
 }
 
 function isValidBookieResult(json: any) {
-  if (!json) {
+  if (json == null) {
     return false;
   }
-  if (!(json.log && [8461, 8462, 8463].includes(json.log))) {
+  if (json.log == null || ![8461, 8462, 8463].includes(Number(json.log))) {
     return false;
   }
-  if (!(json.timestamp && json.timestamp && json.data)) {
+  if (json.timestamp == null || json.data == null) {
     return false;
   }
-  let data = json.data;
-  if (!(data.selection && data.odds && data.bet)) {
+  const data = json.data;
+  if (data.selection == null || data.odds == null || data.bet == null) {
     return false;
   }
   if (data.selection.length < 1) {
@@ -226,14 +229,15 @@ function getBookieStatus(json: any) {
 }
 
 export function createBookieResult(id: string, json: any) {
+  console.log(json);
   if (!isValidBookieResult(json)) {
     return null;
   }
-  let status = getBookieStatus(json);
-  let timestamp = json.timestamp * 1000;
-  let selection = Number(json.data.selection[0]);
-  let odds = parseFloat(json.data.odds);
-  let bet = json.data.bet;
+  const status = getBookieStatus(json);
+  const timestamp = json.timestamp * 1000;
+  const selection = Number(json.data.selection[0]);
+  const odds = parseFloat(json.data.odds);
+  const bet = json.data.bet;
 
   return new BookieResult(id, timestamp, status, selection, bet, odds, 0);
 }

@@ -1,4 +1,3 @@
-import exp from "constants";
 import { BookieResult, BookieStatus, BookieType, createBookieResult } from "../BookieResult";
 
 // You won $2,600,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a
@@ -13,9 +12,9 @@ import { BookieResult, BookieStatus, BookieType, createBookieResult } from "../B
 // href="page.php?sid=bookie#/your-bets/4078025" i-data="i_507_23307_165_14">Sydney Swans v Geelong Cats</a> was refunded"
 
 describe("test BookieResult", () => {
-  var winBet: BookieResult;
-  var loseBet: BookieResult;
-  var refundBet: BookieResult;
+  let winBet: BookieResult;
+  let loseBet: BookieResult;
+  let refundBet: BookieResult;
   beforeEach(() => {
     winBet = new BookieResult(
       "winbet",
@@ -71,7 +70,7 @@ describe("test BookieResult", () => {
   });
 
   test("test addDetailFromEvent winDetail", () => {
-    let winDetail =
+    const winDetail =
       'You won $2,600,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a\
 href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983">\
 Viking v Bodoe/Glimt</a>';
@@ -88,7 +87,7 @@ Viking v Bodoe/Glimt</a>';
   });
 
   test("test addDetailFromEvent loseDetail", () => {
-    let loseDetail =
+    const loseDetail =
       'You lost your $500,000 Under 45.5 Total (Over/Under 45.5 Total  Ordinary time) bet on <a\
 href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4123800">\
 Bahia v America MG</a>';
@@ -105,7 +104,7 @@ Bahia v America MG</a>';
   });
 
   test("test addDetailFromEvent refundDetail", () => {
-    let refundDetail =
+    const refundDetail =
       'Your $2,000,000 Geelong Cats (2-Way Full event) bet on <a\
 href="page.php?sid=bookie#/your-bets/4078025" i-data="i_507_23307_165_14">Sydney Swans v Geelong Cats</a> was refunded';
 
@@ -121,7 +120,7 @@ href="page.php?sid=bookie#/your-bets/4078025" i-data="i_507_23307_165_14">Sydney
   });
 
   test("test addDetailFromEvent AsianHandicap", () => {
-    let winDetail =
+    const winDetail =
       'You won $2,600,000 on your $1,000,000 Viking (-0.5) (Asian Handicap 0.5 Full event) bet on <a\
 href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983">\
 Viking v Bodoe/Glimt</a>';
@@ -132,7 +131,7 @@ Viking v Bodoe/Glimt</a>';
   });
 
   test("test addDetailFromEvent different Status", () => {
-    let winDetail =
+    const winDetail =
       'You lost your $1,000,000 Viking (3-Way Ordinary time) bet on <a\
 href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983">\
 Viking v Bodoe/Glimt</a>';
@@ -143,7 +142,7 @@ Viking v Bodoe/Glimt</a>';
   });
 
   test("test addDetailFromEvent twice does not have effect", () => {
-    let winDetail =
+    const winDetail =
       'You won $2,600,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a\
 href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983">\
 Viking v Bodoe/Glimt</a>';
@@ -153,7 +152,7 @@ Viking v Bodoe/Glimt</a>';
   });
 
   test("test addDetailFromEvent winning money not match", () => {
-    let winDetail =
+    const winDetail =
       'You won $2,000,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a\
 href = http://www.torn.com/"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983">\
 Viking v Bodoe/Glimt</a>';
@@ -164,7 +163,7 @@ Viking v Bodoe/Glimt</a>';
 
 describe("test createBookieResult", () => {
   test("test lose result", () => {
-    let json = JSON.parse(
+    const json = JSON.parse(
       '{\
       "log":8461,\
       "title":"Bookie lose (new)",\
@@ -174,7 +173,7 @@ describe("test createBookieResult", () => {
       "params":{"italic":1,"color":"red"}\
     }'
     );
-    let bookieResult = createBookieResult("test_id", json);
+    const bookieResult = createBookieResult("test_id", json);
     expect(bookieResult).toBeTruthy();
     if (bookieResult !== null) {
       expect(bookieResult.bet).toBe(0.5);
@@ -187,7 +186,7 @@ describe("test createBookieResult", () => {
   });
 
   test("test win result", () => {
-    let json = JSON.parse(
+    const json = JSON.parse(
       '{\
         "log":8462,\
         "title":"Bookie win (new)",\
@@ -198,7 +197,7 @@ describe("test createBookieResult", () => {
         "params":{"italic":1,"color":"green"}\
       }'
     );
-    let bookieResult = createBookieResult("test_id", json);
+    const bookieResult = createBookieResult("test_id", json);
     expect(bookieResult).toBeTruthy();
     if (bookieResult !== null) {
       expect(bookieResult.bet).toBe(0.5);
