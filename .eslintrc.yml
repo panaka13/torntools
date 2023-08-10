@@ -16,4 +16,6 @@ plugins:
 rules: 
   semi: [2, "always"]
   "@typescript-eslint/semi": [0]
+  "@typescript-eslint/explicit-function-return-type": "off"
+  "@typescript-eslint/space-before-function-paren": "off"
 
