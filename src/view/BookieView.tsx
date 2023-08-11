@@ -12,9 +12,8 @@ export function ViewBookieResult() {
     event.preventDefault();
     const userid = Number(event.target.user.value);
     const api = event.target.api.value;
-    const from = new Date(event.target.from.value);
-    const to = new Date(event.target.to.value);
-    const [error, bookieResults] = await getBookieResults(api, userid, from, to);
+    const date = new Date(event.target.date.value);
+    const [error, bookieResults] = await getBookieResults(api, userid, date);
     if (error != null) {
       return;
     }
@@ -34,13 +33,9 @@ export function ViewBookieResult() {
             <Form.Control name="api" type="text" placeholder="API-key" />
             <Form.Text className="text-muted">Your limited API key</Form.Text>
           </Form.Group>
-          <Form.Group controlId="BookieFrom">
-            <Form.Label>From</Form.Label>
-            <Form.Control name="from" type="date" />
-          </Form.Group>
-          <Form.Group controlId="BookieTo">
-            <Form.Label>To</Form.Label>
-            <Form.Control name="to" type="date" />
+          <Form.Group controlId="BookieDate">
+            <Form.Label>Date</Form.Label>
+            <Form.Control name="date" type="date" />
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit

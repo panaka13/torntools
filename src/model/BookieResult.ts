@@ -229,7 +229,6 @@ function getBookieStatus(json: any) {
 }
 
 export function createBookieResult(id: string, json: any) {
-  console.log(json);
   if (!isValidBookieResult(json)) {
     return null;
   }

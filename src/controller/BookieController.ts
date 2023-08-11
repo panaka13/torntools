@@ -44,8 +44,8 @@ async function getBookieResultsImpl(api: string, user: number, from: number, to:
   return [null, bookieResults];
 }
 
-export async function getBookieResults(api: string, user: number, from: Date, to: Date) {
-  const unixFrom = from.getTime() / 1000;
-  const unixTo = to.getTime() / 1000 + SECOND_IN_DAY - 1;
+export async function getBookieResults(api: string, user: number, date: Date) {
+  const unixFrom = date.getTime() / 1000;
+  const unixTo = date.getTime() / 1000 + SECOND_IN_DAY - 1;
   return await getBookieResultsImpl(api, user, unixFrom, unixTo);
 }
