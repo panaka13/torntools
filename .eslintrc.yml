@@ -22,3 +22,8 @@ rules:
   "@typescript-eslint/semi": [0]
   "@typescript-eslint/explicit-function-return-type": "off"
   "@typescript-eslint/space-before-function-paren": "off"
+  "@typescript-eslint/quotes": "off"
+  "@typescript-eslint/no-misused-promises": 
+  - error
+  - checksVoidReturn: false
+  "no-multi-str": "off"
