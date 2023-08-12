@@ -20,7 +20,7 @@ export async function queryTorn(url: string) {
   return [null, json];
 }
 
-export async function GetLogInfo(
+export async function getLogInfo(
   api: string,
   user: number,
   from: number,

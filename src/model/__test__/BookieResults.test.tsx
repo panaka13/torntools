@@ -1,16 +1,5 @@
 import { BookieResult, BookieStatus, BookieType, createBookieResult } from "../BookieResult";
 
-// You won $2,600,000 on your $1,000,000 Viking (3-Way Ordinary time) bet on <a
-// href = http://www.torn.com/\"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4076983\">
-// Viking v Bodoe/Glimt</a>"
-
-// "You lost your $500,000 Draw (3-Way Ordinary time) bet on <a
-// href = http://www.torn.com/\"http://www.torn.com/http://www.torn.com/page.php?sid=bookie#/your-bets/4123800\">
-// Bahia v America MG</a>"
-
-// "Your $2,000,000 Geelong Cats (2-Way Full event) bet on <a
-// href="page.php?sid=bookie#/your-bets/4078025" i-data="i_507_23307_165_14">Sydney Swans v Geelong Cats</a> was refunded"
-
 describe("test BookieResult", () => {
   let winBet: BookieResult;
   let loseBet: BookieResult;

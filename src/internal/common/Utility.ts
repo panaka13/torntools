@@ -15,9 +15,5 @@ export function approximatelyEquals(x: number, y: number) {
     return true;
   }
   const denominator = Math.abs(x + y);
-  if (denominator < EPS) {
-    return numerator < EPS;
-  } else {
-    return numerator / denominator < EPS;
-  }
+  return numerator / denominator < EPS;
 }
