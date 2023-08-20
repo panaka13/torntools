@@ -1,4 +1,4 @@
-import { MILLION, MS_IN_HOUR } from "../internal/common/Consts";
+import { MILLION } from "../internal/common/Consts";
 import { dateToString, approximatelyEquals } from "../internal/common/Utility";
 
 const BOOKIE_DETAIL_URL_PREFIX = "https://www.torn.com/page.php?sid=bookie#/your-bets/";
@@ -142,7 +142,7 @@ export class BookieResult {
   }
 
   toTornTime() {
-    const tornDate = new Date(this.timestamp + MS_IN_HOUR);
+    const tornDate = new Date(this.timestamp);
     return dateToString(tornDate);
   }
 

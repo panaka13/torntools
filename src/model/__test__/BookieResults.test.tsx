@@ -47,9 +47,13 @@ describe("test BookieResult", () => {
   });
 
   test("test toTornTime", () => {
-    expect(winBet.toTornTime()).toBe("2023-08-08");
-    expect(loseBet.toTornTime()).toBe("2023-08-08");
+    expect(winBet.toTornTime()).toBe("2023-08-07");
+    expect(loseBet.toTornTime()).toBe("2023-08-07");
     expect(refundBet.toTornTime()).toBe("2023-08-07");
+    const betResult = new BookieResult(
+      "bet", 1692487460 * 1000, BookieStatus.Win, 123456, 1000, 2, 0
+    );
+    expect(betResult.toTornTime()).toBe("2023-08-19");
   });
 
   test("test getStatusStr", () => {
