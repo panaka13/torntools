@@ -1,23 +1,37 @@
 import { buildUrl } from "build-url-ts";
 
-export async function queryTorn(url: string) {
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      Accept: "application/json"
-    }
-  });
+const MAX_RETRY = 2;
 
-  if (!response.ok) {
-    const error = new Error("HTTP status: " + response.statusText);
-    return [error, null];
+export async function queryTorn(url: string) {
+  let lastError = null;
+  for (let i = 0; i < MAX_RETRY; i++) {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    });
+
+    if (response.status >= 500) {
+      lastError = new Error("HTTP status: " + response.statusText);
+      continue;
+    }
+    if (!response.ok) {
+      const error = new Error("HTTP status: " + response.statusText);
+      return [error, null];
+    }
+    const json = JSON.parse(await response.text());
+    if (json.error != null) {
+      if (json.error.code === 17) {
+        lastError = new Error("Torn status: " + String(json.error.error));
+        continue;
+      }
+      const error = new Error("Torn status: " + String(json.error.error));
+      return [error, null];
+    }
+    return [null, json];
   }
-  const json = JSON.parse(await response.text());
-  if (json.error != null) {
-    const error = new Error("Torn status: " + String(json.error.error));
-    return [error, null];
-  }
-  return [null, json];
+  return [lastError, null];
 }
 
 export async function getLogInfo(
