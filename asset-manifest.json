@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/torntools/static/css/main.536e33e5.css",
+    "main.js": "/torntools/static/js/main.0dc3a1a6.js",
+    "static/js/787.d14326b0.chunk.js": "/torntools/static/js/787.d14326b0.chunk.js",
+    "index.html": "/torntools/index.html",
+    "main.536e33e5.css.map": "/torntools/static/css/main.536e33e5.css.map",
+    "main.0dc3a1a6.js.map": "/torntools/static/js/main.0dc3a1a6.js.map",
+    "787.d14326b0.chunk.js.map": "/torntools/static/js/787.d14326b0.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.536e33e5.css",
+    "static/js/main.0dc3a1a6.js"
+  ]
+}
