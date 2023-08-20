@@ -22,6 +22,10 @@ export async function queryTorn(url: string) {
     }
     const json = JSON.parse(await response.text());
     if (json.error != null) {
+      if (json.error.code === 17) {
+        lastError = new Error("Torn status: " + String(json.error.error));
+        continue;
+      }
       const error = new Error("Torn status: " + String(json.error.error));
       return [error, null];
     }
