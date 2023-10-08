@@ -15,7 +15,6 @@ export function Main() {
         <Nav className="navbar">
           <NavDropdown title="Bookie" id="bokkieMenu">
             <NavDropdown.Item href="/view_bookie">Result</NavDropdown.Item>
-            <NavDropdown.Item href="#">Pending</NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar>
