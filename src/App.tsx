@@ -1,8 +1,8 @@
 import "./App.css";
-import { ViewBookieResult } from "./view/BookieView";
+import { Main } from "./view/template/MainPage";
 
 function App() {
-  return ViewBookieResult();
+  return Main();
 }
 
 export default App;
