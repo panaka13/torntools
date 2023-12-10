@@ -76,3 +76,35 @@ export async function getEventInfo(api: string, user: number, from: number, to: 
   }
   return [null, json.events];
 }
+
+export async function getStocks(api: string) {
+  const url = buildUrl("https://api.torn.com/", {
+    path: "torn/",
+    queryParams: {
+      selections: "stocks",
+      key: api,
+      comment: "panaka_13"
+    }
+  });
+  const [error, json] = await queryTorn(url);
+  if (error !== null) {
+    return [error, json];
+  }
+  return [null, json.stocks];
+}
+
+export async function getItems(api: string) {
+  const url = buildUrl("https://api.torn.com/torn", {
+    path: "torn/",
+    queryParams: {
+      selections: "items",
+      key: api,
+      comment: "panaka_13"
+    }
+  });
+  const [error, json] = await queryTorn(url);
+  if (error !== null) {
+    return [null, json];
+  }
+  return [error, null];
+}

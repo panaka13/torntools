@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Table } from "react-bootstrap";
+import { Button, Form, Table } from "react-bootstrap";
 import { getStockBlock } from "../controller/StockController";
 import type { Stock } from "../model/Stock";
 
@@ -7,31 +7,42 @@ export function ViewStockBlock() {
   const [stockBlockInfoState, setStockBlockInfo] = React.useState(Array<Stock>());
   async function handleUpdate(event: any) {
     event.preventDefault();
-    const api = event.target.api.value;
-    const [error, stock] = await getStockBlock(api);
+    const [error, stocks] = await getStockBlock();
     if (error !== null) {
+      console.log(error);
       return;
     }
-    if (stock === null) {
-      return;
-    }
-    setStockBlockInfo(stock);
+    console.log(stocks);
+    setStockBlockInfo(stocks);
   }
 
   return (<>
     <div>Stock block</div>
     <Form onSubmit={handleUpdate}>
+      <Button variant="primary" type="submit">Submit</Button>
     </Form>
     <Table>
       <thead>
-        <td>ID</td>
-        <td>Acronym</td>
+        <tr>
+          <th>ID</th>
+          <th>Acronym</th>
+          <th>Description</th>
+          <th>Block cost</th>
+          <th>Benefit value</th>
+          <th>Frequency</th>
+          <th>ROI</th>
+        </tr>
       </thead>
       <tbody>
         {stockBlockInfoState.map((stock: Stock, index: number) => (
           <tr key={stock.id}>
             <td>{stock.id}</td>
-            <td>{stock.acrym}</td>
+            <td>{stock.acr}</td>
+            <td>{stock.description}</td>
+            <td>{stock.getBlockCost()}</td>
+            <td>{stock.benefit.getBenefitValue()}</td>
+            <td>{stock.benefit.frequency}</td>
+            <td>{stock.getROI()}</td>
           </tr>
         ))}
       </tbody>
