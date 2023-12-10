@@ -41,8 +41,8 @@ class StockItemBenefit extends StockBenefit {
   }
 
   getBenefitValue(): number {
-    const item = itemCollection.get(this.itemID);
-    if (item === undefined) {
+    const item = itemCollection.findByID(this.itemID);
+    if (item === null) {
       return 0;
     }
     return item.price * this.itemAmount;
@@ -50,7 +50,7 @@ class StockItemBenefit extends StockBenefit {
 }
 
 const stockBenefits: StockBenefit[] = [
-  new StockMoneyBenefit(3 * MILLION, 5 * MILLION), // 1: TSB
+  new StockMoneyBenefit(3 * MILLION, 50 * MILLION), // 1: TSB
   new StockBenefit(1.5 * MILLION, 7), // 2: TCI
   new StockBenefit(3 * MILLION, 7), // 3: SYS
   new StockItemBenefit(750 * THOUSAND, 368, 1), // 4: LAG

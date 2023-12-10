@@ -104,7 +104,7 @@ export async function getItems(api: string) {
   });
   const [error, json] = await queryTorn(url);
   if (error !== null) {
-    return [null, json];
+    return [error, null];
   }
-  return [error, null];
+  return [null, json.items];
 }

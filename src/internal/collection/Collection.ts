@@ -16,6 +16,6 @@ export class Collection {
   }
 
   public isExpired(): boolean {
-    return Date.now() - this.lastUpdate <= MS_IN_HOUR;
+    return Date.now() - this.lastUpdate > MS_IN_HOUR;
   }
 }

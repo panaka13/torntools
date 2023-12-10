@@ -4,6 +4,7 @@ import { parseStocks } from "../model/Stock";
 
 export async function getStockBlock() {
   if (itemCollection.isExpired()) {
+    console.log("update item collection");
     await itemCollection.update();
   }
   const api = process.env.REACT_APP_TORNPUBLICKEY;

@@ -9,10 +9,8 @@ export function ViewStockBlock() {
     event.preventDefault();
     const [error, stocks] = await getStockBlock();
     if (error !== null) {
-      console.log(error);
       return;
     }
-    console.log(stocks);
     setStockBlockInfo(stocks);
   }
 
@@ -39,10 +37,10 @@ export function ViewStockBlock() {
             <td>{stock.id}</td>
             <td>{stock.acr}</td>
             <td>{stock.description}</td>
-            <td>{stock.getBlockCost()}</td>
-            <td>{stock.benefit.getBenefitValue()}</td>
+            <td>{stock.getBlockCost().toLocaleString()}</td>
+            <td>{stock.benefit.getBenefitValue().toLocaleString()}</td>
             <td>{stock.benefit.frequency}</td>
-            <td>{stock.getROI()}</td>
+            <td>{(stock.getROI() * 100).toFixed(2)}</td>
           </tr>
         ))}
       </tbody>

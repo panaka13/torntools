@@ -9,3 +9,13 @@ export class Item {
     this.price = price;
   }
 }
+
+export function parseItems(json: any): Item[] {
+  const items: Item[] = [];
+  for (const [key, value] of Object.entries<any>(json)) {
+    const id = parseInt(key);
+    const item = new Item(id, value.name, value.market_value);
+    items.push(item);
+  }
+  return items;
+}
